@@ -1,11 +1,15 @@
 import { type NextPage } from "next";
 import React from 'react';
-import Chat from "~/components/chat/Chat";
 
 const Home: NextPage = () => {
+
+  // https://github.com/novuhq/blog/blob/main/open-chat-app-with-socketIO/client/src/App.js
+
+
+
   return (
     <div className="App">
-      <Chat />
+      <p>Hello!</p>
     </div>
   );
 };
