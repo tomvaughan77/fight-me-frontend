@@ -9,6 +9,7 @@ const Home: NextPage = () => {
   const [username, setUsername] = useState<string>('')
   const [room, setRoom] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [numOnline, setNumOnline] = useState<number>(0)
 
   const { socket } = useSocket()
   const router = useRouter()
@@ -20,8 +21,13 @@ const Home: NextPage = () => {
             setIsLoading(false)
         })
 
+        socket.on("connectedUsers", data => {
+            setNumOnline(data)
+        })
+
         return () => {
             socket.off('getRoomResponse')
+            socket.off('connectedUsers')
         };
     }
   }, [socket])
@@ -56,6 +62,7 @@ const Home: NextPage = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Welcome to Fight.Me</h1>
+      <h2>There are currently {numOnline} people arguing!</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <label className="mb-2" htmlFor="username">
