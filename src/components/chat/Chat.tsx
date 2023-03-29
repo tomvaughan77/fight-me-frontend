@@ -9,9 +9,10 @@ interface Message {
 interface ChatProps {
     socket: Socket
     username: string
+    room: string
 }
 
-const Chat: React.FC<ChatProps> = ({ socket, username }) => {
+const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
 
@@ -44,6 +45,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username }) => {
 
     return (
         <div className="w-full max-w-lg border rounded shadow p-4">
+            <h1>Room: {room}</h1>
             <div className="mb-4">
                 {messages.map((m, index) => (
                     <div key={index}>

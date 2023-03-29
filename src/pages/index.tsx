@@ -1,13 +1,30 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSocket } from "~/components/socket/socket";
 
 const Home: NextPage = () => {
   // https://github.com/novuhq/blog/blob/main/open-chat-app-with-socketIO/client/src/App.js
 
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState<string>('')
+  const [room, setRoom] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const { socket } = useSocket()
   const router = useRouter()
+
+  useEffect(() => {
+    if (socket) {
+        socket.on("getRoomResponse", data => {
+            setRoom(data.room)
+            setIsLoading(false)
+        })
+
+        return () => {
+            socket.off('getRoomResponse')
+        };
+    }
+  }, [socket])
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -15,8 +32,26 @@ const Home: NextPage = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push(`/chat?username=${username}`);
+
+    if (socket) {
+        setIsLoading(true)
+        socket.emit("getRoom")
+    } else {
+        console.log("No socket - can't join room")
+    }
   }
+
+  useEffect(() => {
+    if (room && !isLoading) {
+        router.push({
+            pathname: "/chat",
+            query: {
+                username: username,
+                room: room
+            }
+        })
+    }
+  }, [room, isLoading]);
 
   return (
     <div className="p-4">
