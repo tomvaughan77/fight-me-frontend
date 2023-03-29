@@ -36,7 +36,6 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
                 text: message,
                 name: username,
                 socketID: socket.id
-
             })
 
             setMessage('');
