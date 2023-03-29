@@ -12,12 +12,15 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({ socket, username }) => {
-    const [messages, setMessages] = useState<Message[]>([{ username: "Test", text: "Test message" }]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        socket.on("messageResponse", data => setMessages([...messages, data]))
-    }, []);
+        socket.on("messageResponse", data => {
+            const newMessage: Message = { username: data.name, text: data.text }
+            setMessages([...messages, newMessage])
+        })
+    }, [socket, messages]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(event.target.value);
@@ -45,7 +48,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username }) => {
                 {messages.map((m, index) => (
                     <div key={index}>
                         {
-                            m.username === username ? <div className="chat chat-start">
+                            m.username !== username ? <div className="chat chat-start">
                                 <div className="chat-header">{m.username}</div>
                                 <div className="chat-bubble">{m.text}</div>
                             </div> : <div className="chat chat-end">
