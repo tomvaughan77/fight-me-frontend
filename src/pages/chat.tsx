@@ -1,32 +1,23 @@
-// import React, { useEffect, useState } from 'react'
-// import { type Socket } from 'socket.io-client'
-// import Chat from '~/components/chat/Chat'
-// import { useSocket } from '~/components/socket/socket'
+import { useRouter } from 'next/router';
+import React from 'react'
+import Chat from '~/components/chat/Chat'
+import { useSocket } from '~/components/socket/socket'
 
-// interface ChatPageProps {
-//     socket: Socket
-// }
+const ChatPage: React.FC = () => {
+    const { socket } = useSocket();
 
-// const ChatPage: React.FC<ChatPageProps> = () => {
-//     const [messages, setMessages] = useState<string[]>([])
+    const router = useRouter();
+    const username = router.query.username
 
-//     const { socket } = useSocket();
+    return (
+      <>
+        {
+          socket && username ? <Chat socket={socket} username={Array.isArray(username) ? username[0] : username} /> : <div>
+            <p>Socket unable to connect. Please try again</p>
+          </div>
+        }
+      </>
+    )
+}
 
-//     useEffect(()=> {
-//       if (socket) {
-//         socket.on("messageResponse", data => setMessages([...messages, data]))
-//       }
-//     }, [socket, messages])
-
-//     return (
-//       <>
-//         {
-//           socket ? <Chat socket={socket} /> : <div>
-//             <p>Socket unable to connect. Please try again</p>
-//           </div>
-//         }
-//       </>
-//     )
-// }
-
-// export default ChatPage
+export default ChatPage

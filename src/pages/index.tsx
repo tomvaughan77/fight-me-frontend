@@ -1,26 +1,28 @@
 import { type NextPage } from "next";
-import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import React, { useState } from 'react';
-import { useSocket } from "~/components/socket/socket";
-
-const Chat = dynamic(() => import('../components/chat/Chat'), { ssr: false });
 
 const Home: NextPage = () => {
   // https://github.com/novuhq/blog/blob/main/open-chat-app-with-socketIO/client/src/App.js
 
   const [username, setUsername] = useState('');
 
-  const { socket } = useSocket();
+  const router = useRouter()
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    router.push(`/chat?username=${username}`);
+  }
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Welcome to my chat app</h1>
+      <h1 className="text-2xl font-bold mb-4">Welcome to Fight.Me</h1>
 
-      <div className="flex flex-col items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <label className="mb-2" htmlFor="username">
           Enter your username:
         </label>
@@ -31,9 +33,13 @@ const Home: NextPage = () => {
           value={username}
           onChange={handleUsernameChange}
         />
-
-        {username && socket && <Chat socket={socket} username={username} />}
-      </div>
+        <button
+            type="submit"
+            className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
+        >
+            Fight!
+        </button>
+      </form>
     </div>
   );
 };
