@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Socket } from 'socket.io-client';
 import Chat from '~/components/chat/Chat'
 import { useSocket } from '~/components/socket/socket'
+import Message from '../types/Message'
 
 const ChatPage: React.FC = () => {
     const { socket } = useSocket();

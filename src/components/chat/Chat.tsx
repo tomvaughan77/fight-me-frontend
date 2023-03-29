@@ -1,10 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { type Socket } from "socket.io-client"
-
-interface Message {
-    username: string;
-    text: string;
-  }
+import Message from "~/types/Message";
 
 interface ChatProps {
     socket: Socket
@@ -17,10 +13,31 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
+        socket.emit("getMessages", { room: room })
+    }, [])
+
+    useEffect(() => {
         socket.on("messageResponse", data => {
             const newMessage: Message = { username: data.name, text: data.text }
             setMessages([...messages, newMessage])
         })
+
+        socket.on("getMessagesResponse", data => {
+            const newMessages: Message[] = []
+
+            if (data) {
+                data.forEach((m: { name: string; text: string; }) => {
+                    newMessages.push({ username: m.name, text: m.text })
+                })
+    
+                setMessages(newMessages)
+            }
+        })
+
+        return () => {
+            socket.off('messageResponse')
+            socket.off('getMessagesResponse')
+        };
     }, [socket, messages]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
