@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
-import { Socket } from 'socket.io-client';
+import { type Socket } from 'socket.io-client';
 import Chat from '~/components/chat/Chat'
 import { useSocket } from '~/components/socket/socket'
-import Message from '../types/Message'
 
 const ChatPage: React.FC = () => {
     const { socket } = useSocket();
@@ -19,9 +18,9 @@ const ChatPage: React.FC = () => {
       
         if (isEmpty) {
             console.log("Empty params - redirecting")
-            router.push('/');
+            void router.push('/');
         }
-      }, [username, room]);
+      }, [router, username, room]);
 
     return (
       <>
@@ -46,14 +45,14 @@ const Window: React.FC<WindowProps> = ({ socket, room, username }) => {
     useEffect(() => {
         if (socket) {
             socket.on("leaveRoomResponse", () => {
-                router.push('/')
+                void router.push('/')
             })
     
             return () => {
                 socket.off('leaveRoomResponse')
             };
         }
-    }, [socket])
+    }, [router, socket])
 
     const handleLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { type Socket } from "socket.io-client"
-import Message from "~/types/Message";
+import type Message from "~/types/Message";
 
 interface ChatProps {
     socket: Socket
@@ -14,15 +14,15 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
 
     useEffect(() => {
         socket.emit("getMessages", { room: room })
-    }, [])
+    }, [room, socket])
 
     useEffect(() => {
-        socket.on("messageResponse", data => {
+        socket.on("messageResponse", ( data: { name: string, text: string } ) => {
             const newMessage: Message = { username: data.name, text: data.text }
             setMessages([...messages, newMessage])
         })
 
-        socket.on("getMessagesResponse", data => {
+        socket.on("getMessagesResponse", (data: { name: string, text: string }[]) => {
             const newMessages: Message[] = []
 
             if (data) {
@@ -52,7 +52,8 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
             socket.emit("message", {
                 text: message,
                 name: username,
-                socketID: socket.id
+                socketID: socket.id,
+                room: room
             })
 
             setMessage('');

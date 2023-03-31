@@ -17,12 +17,12 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (socket) {
-        socket.on("getRoomResponse", data => {
+        socket.on("getRoomResponse", (data: { room: string }) => {
             setRoom(data.room)
             setIsLoading(false)
         })
 
-        socket.on("connectedUsers", data => {
+        socket.on("connectedUsers", (data: { users: number, usersInRooms: number }) => {
             setNumArguing(data.usersInRooms)
             setNumOnline(data.users)
         })
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (room && !isLoading) {
-        router.push({
+        void router.push({
             pathname: "/chat",
             query: {
                 username: username,
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
             }
         })
     }
-  }, [room, isLoading]);
+  }, [router, room, isLoading, username]);
 
   return (
     <div className="p-4">
