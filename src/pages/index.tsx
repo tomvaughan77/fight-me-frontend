@@ -1,7 +1,7 @@
-import { type NextPage } from "next";
-import { useRouter } from "next/router";
-import React, { useEffect, useState, useRef } from 'react';
-import { useSocket } from "~/components/socket/socket";
+import { type NextPage } from 'next'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState, useRef } from 'react'
+import { useSocket } from '~/components/socket/socket'
 
 const Home: NextPage = () => {
   // https://github.com/novuhq/blog/blob/main/open-chat-app-with-socketIO/client/src/App.js
@@ -12,67 +12,73 @@ const Home: NextPage = () => {
   const [numOnline, setNumOnline] = useState<number>(0)
   const [numArguing, setNumArguing] = useState<number>(0)
 
-  const usernameInputElement = useRef<HTMLInputElement>(null);
+  const usernameInputElement = useRef<HTMLInputElement>(null)
 
   const { socket } = useSocket()
   const router = useRouter()
 
   useEffect(() => {
     if (socket) {
-        socket.on("getRoomResponse", (data: { room: string }) => {
-            setRoom(data.room)
-            setIsLoading(false)
-        })
+      socket.on('getRoomResponse', (data: { room: string }) => {
+        setRoom(data.room)
+        setIsLoading(false)
+      })
 
-        socket.on("connectedUsers", (data: { users: number, usersInRooms: number }) => {
-            setNumArguing(data.usersInRooms)
-            setNumOnline(data.users)
-        })
+      socket.on(
+        'connectedUsers',
+        (data: { users: number; usersInRooms: number }) => {
+          setNumArguing(data.usersInRooms)
+          setNumOnline(data.users)
+        }
+      )
 
-        return () => {
-            socket.off('getRoomResponse')
-            socket.off('connectedUsers')
-        };
+      return () => {
+        socket.off('getRoomResponse')
+        socket.off('connectedUsers')
+      }
     }
   }, [socket])
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
+    setUsername(event.target.value)
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (socket) {
-        setIsLoading(true)
-        socket.emit("getRoom")
+      setIsLoading(true)
+      socket.emit('getRoom')
     } else {
-        console.log("No socket - can't join room")
+      console.log("No socket - can't join room")
     }
   }
 
   useEffect(() => {
     if (room && !isLoading) {
-        void router.push({
-            pathname: "/chat",
-            query: {
-                username: username,
-                room: room
-            }
-        })
+      void router.push({
+        pathname: '/chat',
+        query: {
+          username: username,
+          room: room,
+        },
+      })
     }
-  }, [router, room, isLoading, username]);
+  }, [router, room, isLoading, username])
 
   useEffect(() => {
     if (usernameInputElement.current) {
-      usernameInputElement.current.focus();
+      usernameInputElement.current.focus()
     }
-  }, []);
+  }, [])
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Welcome to Fight.Me</h1>
-      <h2>There are currently {numOnline} people online, with {numArguing} of them currently arguing!</h2>
+      <h2>
+        There are currently {numOnline} people online, with {numArguing} of them
+        currently arguing!
+      </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <label className="mb-2" htmlFor="username">
@@ -88,14 +94,14 @@ const Home: NextPage = () => {
           onChange={handleUsernameChange}
         />
         <button
-            type="submit"
-            className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
+          type="submit"
+          className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
         >
-            Fight!
+          Fight!
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
