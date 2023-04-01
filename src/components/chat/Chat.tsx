@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { type Socket } from "socket.io-client"
 import type Message from "~/types/Message";
 
@@ -11,6 +11,14 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
+
+    const textInputElement = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (textInputElement.current) {
+          textInputElement.current.focus();
+        }
+      }, []);
 
     useEffect(() => {
         socket.emit("getMessages", { room: room })
@@ -83,6 +91,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
                 <input
                     type="text"
                     value={message}
+                    ref={textInputElement}
                     onChange={handleInputChange}
                     placeholder="Type your message here"
                     className="w-full px-2 py-1 rounded-l border border-gray-400"

@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSocket } from "~/components/socket/socket";
 
 const Home: NextPage = () => {
@@ -11,6 +11,8 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [numOnline, setNumOnline] = useState<number>(0)
   const [numArguing, setNumArguing] = useState<number>(0)
+
+  const usernameInputElement = useRef<HTMLInputElement>(null);
 
   const { socket } = useSocket()
   const router = useRouter()
@@ -61,6 +63,12 @@ const Home: NextPage = () => {
     }
   }, [router, room, isLoading, username]);
 
+  useEffect(() => {
+    if (usernameInputElement.current) {
+      usernameInputElement.current.focus();
+    }
+  }, []);
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Welcome to Fight.Me</h1>
@@ -74,6 +82,8 @@ const Home: NextPage = () => {
           className="px-2 py-1 rounded border border-gray-400 mb-4"
           type="text"
           id="username"
+          autoComplete="off"
+          ref={usernameInputElement}
           value={username}
           onChange={handleUsernameChange}
         />
