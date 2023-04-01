@@ -71,33 +71,35 @@ const Home: NextPage = () => {
     }, [])
 
     return (
-        <div className="p-4">
+        <>
             <Header />
-            <h2>
-                There are currently {numOnline} people online, with {numArguing} of them currently arguing!
-            </h2>
+            <div className="container mx-auto">
+                <h2>
+                    There are currently {numOnline} people online, with {numArguing} of them currently arguing!
+                </h2>
 
-            <form onSubmit={handleSubmit} className="flex flex-col items-center">
-                <label className="mb-2" htmlFor="username">
-                    Enter your username:
-                </label>
-                <input
-                    className="px-2 py-1 rounded border border-gray-400 mb-4"
-                    type="text"
-                    id="username"
-                    autoComplete="off"
-                    ref={usernameInputElement}
-                    value={username}
-                    onChange={handleUsernameChange}
-                />
-                <button
-                    type="submit"
-                    className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
-                >
-                    Fight!
-                </button>
-            </form>
-        </div>
+                <form onSubmit={handleSubmit} className="flex flex-col items-center">
+                    <label className="mb-2" htmlFor="username">
+                        Enter your username:
+                    </label>
+                    <input
+                        className="px-2 py-1 rounded border border-gray-400 mb-4"
+                        type="text"
+                        id="username"
+                        autoComplete="off"
+                        ref={usernameInputElement}
+                        value={username}
+                        onChange={handleUsernameChange}
+                    />
+                    <button
+                        type="submit"
+                        className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
+                    >
+                        Fight!
+                    </button>
+                </form>
+            </div>
+        </>
     )
 }
 
