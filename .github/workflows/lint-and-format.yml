@@ -9,10 +9,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: $(bash -c 'echo -n "$(cat .nvmrc)"')
+          node-version: ${{ steps.nvm.outputs.NVMRC }}"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
