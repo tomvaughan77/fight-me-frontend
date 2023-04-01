@@ -1,47 +1,47 @@
 name: Lint and Format
 on: [push]
 jobs:
-  lint-and-format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    lint-and-format:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Read .nvmrc
-        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-        id: nvm
+            - name: Read .nvmrc
+              run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+              id: nvm
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ steps.nvm.outputs.NVMRC }}
+            - name: Install Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ steps.nvm.outputs.NVMRC }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        id: pnpm-install
-        with:
-          version: 'latest'
-          run_install: false
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v2
+              id: pnpm-install
+              with:
+                  version: 'latest'
+                  run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              shell: bash
+              run: |
+                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            - uses: actions/cache@v3
+              name: Setup pnpm cache
+              with:
+                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm run lint
+            - name: Lint
+              run: pnpm run lint
 
-      - name: Format check
-        run: pnpm run format:check
+            - name: Format check
+              run: pnpm run format:check
