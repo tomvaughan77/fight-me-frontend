@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import io, { type Socket } from 'socket.io-client'
 
 interface SocketProviderProps {
@@ -31,9 +25,5 @@ export function SocketProvider({ children }: SocketProviderProps) {
     }
   }, [])
 
-  return (
-    <SocketContext.Provider value={{ socket }}>
-      {children}
-    </SocketContext.Provider>
-  )
+  return <SocketContext.Provider value={{ socket }}>{children}</SocketContext.Provider>
 }

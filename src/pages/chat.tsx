@@ -12,9 +12,7 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     console.log(JSON.stringify(router.query))
-    const isEmpty = [username, room].some(
-      (value) => !value || Array.isArray(value) || value.trim() === ''
-    )
+    const isEmpty = [username, room].some((value) => !value || Array.isArray(value) || value.trim() === '')
 
     if (isEmpty) {
       console.log('Empty params - redirecting')
@@ -25,11 +23,7 @@ const ChatPage: React.FC = () => {
   return (
     <>
       {socket && username ? (
-        <Window
-          socket={socket}
-          room={room as string}
-          username={username as string}
-        />
+        <Window socket={socket} room={room as string} username={username as string} />
       ) : (
         <div>
           <p>Socket unable to connect. Please try again</p>

@@ -30,20 +30,17 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
       setMessages([...messages, newMessage])
     })
 
-    socket.on(
-      'getMessagesResponse',
-      (data: { name: string; text: string }[]) => {
-        const newMessages: Message[] = []
+    socket.on('getMessagesResponse', (data: { name: string; text: string }[]) => {
+      const newMessages: Message[] = []
 
-        if (data) {
-          data.forEach((m: { name: string; text: string }) => {
-            newMessages.push({ username: m.name, text: m.text })
-          })
+      if (data) {
+        data.forEach((m: { name: string; text: string }) => {
+          newMessages.push({ username: m.name, text: m.text })
+        })
 
-          setMessages(newMessages)
-        }
+        setMessages(newMessages)
       }
-    )
+    })
 
     return () => {
       socket.off('messageResponse')
