@@ -12,7 +12,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: $(cat .nvmrc)
+          node-version: $(bash -c 'echo -n "$(cat .nvmrc)"')
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
