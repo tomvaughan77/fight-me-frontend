@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { type Socket } from 'socket.io-client'
 import type Message from '~/types/Message'
 import Footer from './Footer'
@@ -7,9 +7,10 @@ interface ChatProps {
     socket: Socket
     username: string
     room: string
+    handleLeave: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
+const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
     const [messages, setMessages] = useState<Message[]>([])
 
     useEffect(() => {
@@ -41,27 +42,42 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room }) => {
     }, [socket, messages])
 
     return (
-        <div className="w-full max-w-lg border rounded shadow p-4">
-            <h1>Room: {room}</h1>
-            <div className="mb-4">
-                {messages.map((m, index) => (
-                    <div key={index}>
-                        {m.username !== username ? (
-                            <div className="chat chat-start">
-                                <div className="chat-header">{m.username}</div>
-                                <div className="chat-bubble">{m.text}</div>
-                            </div>
-                        ) : (
-                            <div className="chat chat-end">
-                                <div className="chat-header">{m.username}</div>
-                                <div className="chat-bubble">{m.text}</div>
-                            </div>
-                        )}
+        <div className="flex h-full w-full">
+            <div className="container mx-auto border rounded shadow p-4">
+                <div className="card flex-grow card-compact card-bordered">
+                    <div className="card-body">
+                        <h1 className="card-title">
+                            You are arguing {<div className="badge badge-success gap-2">FOR</div>}: Loreum Ipsum
+                        </h1>
+                        <p>Unique room ID: {room}</p>
+                        <button
+                            className="px-4 py-1 rounded-r bg-red-500 text-white font-bold hover:bg-red-600 transition-colors duration-300"
+                            onClick={handleLeave}
+                        >
+                            Sod this...
+                        </button>
                     </div>
-                ))}
-            </div>
+                </div>
+                <div className="mb-4">
+                    {messages.map((m, index) => (
+                        <div key={index}>
+                            {m.username !== username ? (
+                                <div className="chat chat-start">
+                                    <div className="chat-header">{m.username}</div>
+                                    <div className="chat-bubble chat-bubble-secondary">{m.text}</div>
+                                </div>
+                            ) : (
+                                <div className="chat chat-end">
+                                    <div className="chat-header">{m.username}</div>
+                                    <div className="chat-bubble chat-bubble-primary">{m.text}</div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
 
-            <Footer username={username} room={room} socket={socket} />
+                <Footer username={username} room={room} socket={socket} />
+            </div>
         </div>
     )
 }

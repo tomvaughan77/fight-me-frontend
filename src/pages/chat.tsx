@@ -62,13 +62,7 @@ const Window: React.FC<WindowProps> = ({ socket, room, username }) => {
 
     return (
         <>
-            <button
-                className="px-4 py-1 rounded-r bg-red-500 text-white font-bold hover:bg-red-600 transition-colors duration-300"
-                onClick={handleLeave}
-            >
-                Sod this...
-            </button>
-            <Chat socket={socket} room={room} username={username} />
+            <Chat socket={socket} room={room} username={username} handleLeave={handleLeave} />
         </>
     )
 }

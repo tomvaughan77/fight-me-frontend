@@ -10,6 +10,9 @@ dependencies:
   react:
     specifier: 18.2.0
     version: 18.2.0
+  react-daisyui:
+    specifier: ^3.1.1
+    version: 3.1.1(daisyui@2.51.5)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.2.7)
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
@@ -2305,6 +2308,20 @@ packages:
   /quick-lru@5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
+
+  /react-daisyui@3.1.1(daisyui@2.51.5)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.2.7):
+    resolution: {integrity: sha512-gw10oQypueh0QW68utIr/Tja8nRGhquq/H1rzsx5UjDZ0aaLaDc/AgV2pnObSnzoYlcF1oaIK9EbSNzVk1C/eg==}
+    peerDependencies:
+      daisyui: ^2.51.5
+      react: '>=16'
+      react-dom: '>=16'
+      tailwindcss: '>=3.2.7'
+    dependencies:
+      daisyui: 2.51.5(autoprefixer@10.4.14)(postcss@8.4.21)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tailwindcss: 3.2.7(postcss@8.4.21)
+    dev: false
 
   /react-dom@18.2.0(react@18.2.0):
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}

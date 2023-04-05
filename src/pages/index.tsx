@@ -1,6 +1,7 @@
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
+import { Countdown } from 'react-daisyui'
 import { useSocket } from '~/components/socket/socket'
 
 const Home: NextPage = () => {
@@ -72,9 +73,7 @@ const Home: NextPage = () => {
     return (
         <>
             <div className="container mx-auto">
-                <h2>
-                    There are currently {numOnline} people online, with {numArguing} of them currently arguing!
-                </h2>
+                <NumOnlineTracker numOnline={numOnline} numArguing={numArguing} />
 
                 <form onSubmit={handleSubmit} className="flex flex-col items-center">
                     <label className="mb-2" htmlFor="username">
@@ -96,6 +95,25 @@ const Home: NextPage = () => {
                         Fight!
                     </button>
                 </form>
+            </div>
+        </>
+    )
+}
+
+const NumOnlineTracker = ({ numOnline, numArguing }: { numOnline: number; numArguing: number }) => {
+    return (
+        <>
+            <div className="card">
+                <div className="card-body">
+                    <Countdown value={numOnline} />
+                    <p>people currently online</p>
+                </div>
+            </div>
+            <div className="card">
+                <div className="card-body">
+                    <Countdown value={numArguing} />
+                    <p>people currently arguing</p>
+                </div>
             </div>
         </>
     )
