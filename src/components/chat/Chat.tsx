@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { type Socket } from 'socket.io-client'
 import type Message from '~/types/Message'
 import Footer from './Footer'
@@ -12,6 +12,7 @@ interface ChatProps {
 
 const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
     const [messages, setMessages] = useState<Message[]>([])
+    const lastMessageRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         socket.emit('getMessages', { room: room })
@@ -40,6 +41,12 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
             socket.off('getMessagesResponse')
         }
     }, [socket, messages])
+
+    useEffect(() => {
+        if (lastMessageRef) {
+            lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [messages])
 
     return (
         <div className="flex h-full w-full">
@@ -74,6 +81,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
                             )}
                         </div>
                     ))}
+                    <div ref={lastMessageRef} />
                 </div>
 
                 <Footer username={username} room={room} socket={socket} />
