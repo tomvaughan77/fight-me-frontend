@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { type Socket } from 'socket.io-client'
 import Chat from '~/components/chat/Chat'
-import Header from '~/components/header/Header'
 import { useSocket } from '~/components/socket/socket'
 
 const ChatPage: React.FC = () => {
@@ -63,7 +62,6 @@ const Window: React.FC<WindowProps> = ({ socket, room, username }) => {
 
     return (
         <>
-            <Header />
             <button
                 className="px-4 py-1 rounded-r bg-red-500 text-white font-bold hover:bg-red-600 transition-colors duration-300"
                 onClick={handleLeave}

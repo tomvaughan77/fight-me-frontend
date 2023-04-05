@@ -1,7 +1,6 @@
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState, useRef } from 'react'
-import Header from '~/components/header/Header'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSocket } from '~/components/socket/socket'
 
 const Home: NextPage = () => {
@@ -72,7 +71,6 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Header />
             <div className="container mx-auto">
                 <h2>
                     There are currently {numOnline} people online, with {numArguing} of them currently arguing!
