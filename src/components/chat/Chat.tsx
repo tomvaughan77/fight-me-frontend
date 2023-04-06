@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { type Socket } from 'socket.io-client'
 import type Message from '~/types/Message'
-import Footer from './Footer'
 
 interface ChatProps {
     socket: Socket
@@ -43,20 +42,19 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
     }, [socket, messages])
 
     useEffect(() => {
-        if (lastMessageRef) {
-            lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ behavior: 'smooth' })
         }
     }, [messages])
 
     return (
-        <div className="flex h-full w-full">
-            <div className="container mx-auto border rounded shadow p-4">
-                <div className="card flex-grow card-compact card-bordered">
+        <div className="flex flex-col h-full">
+            <div className="container mx-auto border rounded shadow p-4 flex flex-col h-full">
+                <div className="card card-compact card-bordered">
                     <div className="card-body">
                         <h1 className="card-title">
                             You are arguing {<div className="badge badge-success gap-2">FOR</div>}: Loreum Ipsum
                         </h1>
-                        <p>Unique room ID: {room}</p>
                         <button
                             className="px-4 py-1 rounded-r bg-red-500 text-white font-bold hover:bg-red-600 transition-colors duration-300"
                             onClick={handleLeave}
@@ -65,7 +63,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
                         </button>
                     </div>
                 </div>
-                <div className="mb-4">
+                <div className="flex-grow mb-4 overflow-y-auto">
                     {messages.map((m, index) => (
                         <div key={index}>
                             {m.username !== username ? (
@@ -83,10 +81,67 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
                     ))}
                     <div ref={lastMessageRef} />
                 </div>
-
-                <Footer username={username} room={room} socket={socket} />
+                <div>
+                    <Footer username={username} room={room} socket={socket} />
+                </div>
             </div>
         </div>
+    )
+}
+
+interface FooterProps {
+    username: string
+    room: string
+    socket: Socket
+}
+
+const Footer: React.FC<FooterProps> = ({ username, room, socket }) => {
+    const [message, setMessage] = useState<string>('')
+
+    const textInputElement = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (textInputElement.current) {
+            textInputElement.current.focus()
+        }
+    }, [])
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(event.target.value)
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        if (message.trim()) {
+            socket.emit('message', {
+                text: message,
+                name: username,
+                socketID: socket.id,
+                room: room,
+            })
+
+            setMessage('')
+        }
+    }
+
+    return (
+        <form className="flex" onSubmit={handleSubmit}>
+            <input
+                type="text"
+                value={message}
+                ref={textInputElement}
+                onChange={handleInputChange}
+                placeholder="Type your message here"
+                className="w-full px-2 py-1 rounded-l border border-gray-400"
+            />
+            <button
+                type="submit"
+                className="px-4 py-1 rounded-r bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors duration-300"
+            >
+                Send
+            </button>
+        </form>
     )
 }
 
