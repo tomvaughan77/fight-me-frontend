@@ -4,10 +4,21 @@ const ThemePicker: React.FC = () => {
     const [theme, setTheme] = useState('light')
 
     useEffect(() => {
+        const savedTheme = localStorage.getItem('theme')
+        if (savedTheme !== null) {
+            setTheme(JSON.parse(savedTheme))
+        }
+    }, [])
+
+    useEffect(() => {
         document.querySelector('html')?.setAttribute('data-theme', theme)
     }, [theme])
 
-    const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark')
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark'
+        setTheme(newTheme)
+        localStorage.setItem('theme', JSON.stringify(newTheme))
+    }
 
     return (
         <label>
