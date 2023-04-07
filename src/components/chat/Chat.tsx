@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { type Socket } from 'socket.io-client'
 import type Message from '~/types/Message'
+import TopicLabel from './TopicLabel'
 
 interface ChatProps {
     socket: Socket
     username: string
     room: string
+    topic: string
+    side: string
     handleLeave: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
+const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handleLeave }) => {
     const [messages, setMessages] = useState<Message[]>([])
     const lastMessageRef = useRef<HTMLDivElement>(null)
 
@@ -53,12 +56,9 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, handleLeave }) => {
                 <div className="card card-compact card-bordered">
                     <div className="card-body">
                         <h1 className="card-title">
-                            You are arguing {<div className="badge badge-success gap-2">FOR</div>}: Loreum Ipsum
+                            <TopicLabel topic={topic} side={side} />
                         </h1>
-                        <button
-                            className="px-4 py-1 rounded-r bg-red-500 text-white font-bold hover:bg-red-600 transition-colors duration-300"
-                            onClick={handleLeave}
-                        >
+                        <button className="btn-accent btn-sm" onClick={handleLeave}>
                             Sod this...
                         </button>
                     </div>

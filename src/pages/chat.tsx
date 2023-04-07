@@ -8,22 +8,30 @@ const ChatPage: React.FC = () => {
     const { socket } = useSocket()
 
     const router = useRouter()
-    const { username, room } = router.query
+    const { username, room, topic, side } = router.query
 
     useEffect(() => {
         console.log(JSON.stringify(router.query))
-        const isEmpty = [username, room].some((value) => !value || Array.isArray(value) || value.trim() === '')
+        const isEmpty = [username, room, topic, side].some(
+            (value) => !value || Array.isArray(value) || value.trim() === ''
+        )
 
         if (isEmpty) {
             console.log('Empty params - redirecting')
             void router.push('/')
         }
-    }, [router, username, room])
+    }, [router, username, room, topic, side])
 
     return (
         <>
             {socket && username ? (
-                <Window socket={socket} room={room as string} username={username as string} />
+                <Window
+                    socket={socket}
+                    room={room as string}
+                    username={username as string}
+                    topic={topic as string}
+                    side={(side as string).toLowerCase() === 'true'}
+                />
             ) : (
                 <div>
                     <p>Socket unable to connect. Please try again</p>
@@ -37,9 +45,11 @@ interface WindowProps {
     socket: Socket
     room: string
     username: string
+    topic: string
+    side: string
 }
 
-const Window: React.FC<WindowProps> = ({ socket, room, username }) => {
+const Window: React.FC<WindowProps> = ({ socket, room, username, topic, side }) => {
     const router = useRouter()
 
     useEffect(() => {
@@ -62,7 +72,7 @@ const Window: React.FC<WindowProps> = ({ socket, room, username }) => {
 
     return (
         <>
-            <Chat socket={socket} room={room} username={username} handleLeave={handleLeave} />
+            <Chat socket={socket} room={room} username={username} topic={topic} side={side} handleLeave={handleLeave} />
         </>
     )
 }

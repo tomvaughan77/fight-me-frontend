@@ -9,6 +9,8 @@ const Home: NextPage = () => {
 
     const [username, setUsername] = useState<string>('')
     const [room, setRoom] = useState<string>('')
+    const [topic, setTopic] = useState<string>('')
+    const [side, setSide] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [numOnline, setNumOnline] = useState<number>(0)
     const [numArguing, setNumArguing] = useState<number>(0)
@@ -20,8 +22,11 @@ const Home: NextPage = () => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('getRoomResponse', (data: { room: string }) => {
+            socket.on('getRoomResponse', (data: { room: string; topic: string; side: string }) => {
+                console.log(`Room response: ${JSON.stringify(data)}`)
                 setRoom(data.room)
+                setTopic(data.topic)
+                setSide(data.side)
                 setIsLoading(false)
             })
 
@@ -53,16 +58,18 @@ const Home: NextPage = () => {
     }
 
     useEffect(() => {
-        if (room && !isLoading) {
+        if (room && topic && !isLoading) {
             void router.push({
                 pathname: '/chat',
                 query: {
                     username: username,
                     room: room,
+                    topic: topic,
+                    side: side,
                 },
             })
         }
-    }, [router, room, isLoading, username])
+    }, [router, room, topic, side, isLoading, username])
 
     useEffect(() => {
         if (usernameInputElement.current) {
