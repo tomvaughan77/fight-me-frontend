@@ -30,7 +30,7 @@ const ChatPage: React.FC = () => {
                     room={room as string}
                     username={username as string}
                     topic={topic as string}
-                    side={(side as string).toLowerCase() === 'true'}
+                    side={side as string}
                 />
             ) : (
                 <div>

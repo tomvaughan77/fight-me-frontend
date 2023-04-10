@@ -21,8 +21,8 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handle
     }, [room, socket])
 
     useEffect(() => {
-        socket.on('messageResponse', (data: { name: string; text: string }) => {
-            const newMessage: Message = { username: data.name, text: data.text }
+        socket.on('messageResponse', (data: { name: string; text: string; timestamp: string }) => {
+            const newMessage: Message = { username: data.name, text: data.text, timestamp: data.timestamp }
             setMessages([...messages, newMessage])
         })
 
@@ -30,8 +30,8 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handle
             const newMessages: Message[] = []
 
             if (data) {
-                data.forEach((m: { name: string; text: string }) => {
-                    newMessages.push({ username: m.name, text: m.text })
+                data.forEach((m: { name: string; text: string; timestamp?: string }) => {
+                    newMessages.push({ username: m.name, text: m.text, timestamp: m.timestamp })
                 })
 
                 setMessages(newMessages)
@@ -70,11 +70,13 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handle
                                 <div className="chat chat-start">
                                     <div className="chat-header">{m.username}</div>
                                     <div className="chat-bubble chat-bubble-secondary">{m.text}</div>
+                                    {m.timestamp ? <div className="chat-footer opacity-50">{m.timestamp}</div> : <></>}
                                 </div>
                             ) : (
                                 <div className="chat chat-end">
                                     <div className="chat-header">{m.username}</div>
                                     <div className="chat-bubble chat-bubble-primary">{m.text}</div>
+                                    {m.timestamp ? <div className="chat-footer opacity-50">{m.timestamp}</div> : <></>}
                                 </div>
                             )}
                         </div>
