@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { type Socket } from 'socket.io-client'
+import useSocket from '~/hooks/useSocket'
 import type Message from '~/types/Message'
 import TopicLabel from './TopicLabel'
 
 interface ChatProps {
-    socket: Socket
     username: string
     room: string
     topic: string
@@ -12,35 +11,41 @@ interface ChatProps {
     handleLeave: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handleLeave }) => {
+const Chat: React.FC<ChatProps> = ({ username, room, topic, side, handleLeave }) => {
     const [messages, setMessages] = useState<Message[]>([])
     const lastMessageRef = useRef<HTMLDivElement>(null)
 
+    const { socket } = useSocket()
+
     useEffect(() => {
-        socket.emit('getMessages', { room: room })
+        if (socket) {
+            socket.emit('getMessages', { room: room })
+        }
     }, [room, socket])
 
     useEffect(() => {
-        socket.on('messageResponse', (data: { name: string; text: string; timestamp: string }) => {
-            const newMessage: Message = { username: data.name, text: data.text, timestamp: data.timestamp }
-            setMessages([...messages, newMessage])
-        })
+        if (socket) {
+            socket.on('messageResponse', (data: { name: string; text: string; timestamp: string }) => {
+                const newMessage: Message = { username: data.name, text: data.text, timestamp: data.timestamp }
+                setMessages([...messages, newMessage])
+            })
 
-        socket.on('getMessagesResponse', (data: { name: string; text: string }[]) => {
-            const newMessages: Message[] = []
+            socket.on('getMessagesResponse', (data: { name: string; text: string }[]) => {
+                const newMessages: Message[] = []
 
-            if (data) {
-                data.forEach((m: { name: string; text: string; timestamp?: string }) => {
-                    newMessages.push({ username: m.name, text: m.text, timestamp: m.timestamp })
-                })
+                if (data) {
+                    data.forEach((m: { name: string; text: string; timestamp?: string }) => {
+                        newMessages.push({ username: m.name, text: m.text, timestamp: m.timestamp })
+                    })
 
-                setMessages(newMessages)
+                    setMessages(newMessages)
+                }
+            })
+
+            return () => {
+                socket.off('messageResponse')
+                socket.off('getMessagesResponse')
             }
-        })
-
-        return () => {
-            socket.off('messageResponse')
-            socket.off('getMessagesResponse')
         }
     }, [socket, messages])
 
@@ -84,7 +89,7 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handle
                     <div ref={lastMessageRef} />
                 </div>
                 <div>
-                    <Footer username={username} room={room} socket={socket} />
+                    <Footer username={username} room={room} />
                 </div>
             </div>
         </div>
@@ -94,11 +99,11 @@ const Chat: React.FC<ChatProps> = ({ socket, username, room, topic, side, handle
 interface FooterProps {
     username: string
     room: string
-    socket: Socket
 }
 
-const Footer: React.FC<FooterProps> = ({ username, room, socket }) => {
+const Footer: React.FC<FooterProps> = ({ username, room }) => {
     const [message, setMessage] = useState<string>('')
+    const { socket } = useSocket()
 
     const textInputElement = useRef<HTMLInputElement>(null)
 
@@ -115,7 +120,7 @@ const Footer: React.FC<FooterProps> = ({ username, room, socket }) => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        if (message.trim()) {
+        if (socket && message.trim()) {
             socket.emit('message', {
                 text: message,
                 name: username,

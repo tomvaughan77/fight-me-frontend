@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { type Socket } from 'socket.io-client'
 import Chat from '~/components/chat/Chat'
-import { useSocket } from '~/components/socket/socket'
+import useSocket from '~/hooks/useSocket'
 
 const ChatPage: React.FC = () => {
     const { socket } = useSocket()
@@ -26,7 +25,6 @@ const ChatPage: React.FC = () => {
         <>
             {socket && username ? (
                 <Window
-                    socket={socket}
                     room={room as string}
                     username={username as string}
                     topic={topic as string}
@@ -42,37 +40,23 @@ const ChatPage: React.FC = () => {
 }
 
 interface WindowProps {
-    socket: Socket
     room: string
     username: string
     topic: string
     side: string
 }
 
-const Window: React.FC<WindowProps> = ({ socket, room, username, topic, side }) => {
+const Window: React.FC<WindowProps> = ({ room, username, topic, side }) => {
     const router = useRouter()
-
-    useEffect(() => {
-        if (socket) {
-            socket.on('leaveRoomResponse', () => {
-                void router.push('/')
-            })
-
-            return () => {
-                socket.off('leaveRoomResponse')
-            }
-        }
-    }, [router, socket])
-
-    const handleLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-
-        socket.emit('leaveRoom', { room: room })
-    }
+    const { leaveRoom } = useSocket({
+        leaveRoomResponse: () => {
+            router.push('/')
+        },
+    })
 
     return (
         <>
-            <Chat socket={socket} room={room} username={username} topic={topic} side={side} handleLeave={handleLeave} />
+            <Chat room={room} username={username} topic={topic} side={side} handleLeave={() => leaveRoom(room)} />
         </>
     )
 }

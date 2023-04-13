@@ -2,7 +2,7 @@ import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Countdown } from 'react-daisyui'
-import { useSocket } from '~/components/socket/socket'
+import useSocket from '~/hooks/useSocket'
 
 const Home: NextPage = () => {
     // https://github.com/novuhq/blog/blob/main/open-chat-app-with-socketIO/client/src/App.js
