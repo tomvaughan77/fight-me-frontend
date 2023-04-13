@@ -24,7 +24,7 @@ const ChatPage: React.FC = () => {
     return (
         <>
             {socket && username ? (
-                <Window
+                <Chat
                     room={room as string}
                     username={username as string}
                     topic={topic as string}
@@ -35,28 +35,6 @@ const ChatPage: React.FC = () => {
                     <p>Socket unable to connect. Please try again</p>
                 </div>
             )}
-        </>
-    )
-}
-
-interface WindowProps {
-    room: string
-    username: string
-    topic: string
-    side: string
-}
-
-const Window: React.FC<WindowProps> = ({ room, username, topic, side }) => {
-    const router = useRouter()
-    const { leaveRoom } = useSocket({
-        leaveRoomResponse: () => {
-            router.push('/')
-        },
-    })
-
-    return (
-        <>
-            <Chat room={room} username={username} topic={topic} side={side} handleLeave={() => leaveRoom(room)} />
         </>
     )
 }

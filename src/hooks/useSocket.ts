@@ -34,7 +34,18 @@ const useSocket = (handlers?: SocketHandlers) => {
         }
     }
 
-    return { socket, leaveRoom }
+    const sendMessage = (text: string, username: string, room: string) => {
+        if (socket) {
+            socket.emit('message', {
+                text: text,
+                name: username,
+                socketID: socket.id,
+                room: room,
+            })
+        }
+    }
+
+    return { socket, leaveRoom, sendMessage }
 }
 
 export default useSocket

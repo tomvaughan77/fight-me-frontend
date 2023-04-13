@@ -14,6 +14,7 @@ describe('useSocket', () => {
             on: jest.fn(),
             emit: jest.fn(),
             disconnect: jest.fn(),
+            id: '98765',
         } as unknown as jest.Mocked<Socket>
         ;(io as jest.MockedFunction<typeof io>).mockReturnValue(socketMock)
     })
@@ -56,5 +57,24 @@ describe('useSocket', () => {
         })
 
         expect(socketMock.emit).toHaveBeenCalledWith('leaveRoom', { room: roomId })
+    })
+
+    it('should call sendMessage and emit the message event', () => {
+        const roomId = '12345'
+        const username = 'example_name'
+        const text = 'hello world'
+
+        const { result } = renderHook(() => useSocket())
+
+        act(() => {
+            result.current.sendMessage(text, username, roomId)
+        })
+
+        expect(socketMock.emit).toHaveBeenCalledWith('message', {
+            text: text,
+            name: username,
+            room: roomId,
+            socketID: result.current.socket?.id,
+        })
     })
 })

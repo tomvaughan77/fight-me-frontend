@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import useSocket from '~/hooks/useSocket'
 import type Message from '~/types/Message'
@@ -8,14 +9,19 @@ interface ChatProps {
     room: string
     topic: string
     side: string
-    handleLeave: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const Chat: React.FC<ChatProps> = ({ username, room, topic, side, handleLeave }) => {
+const Chat: React.FC<ChatProps> = ({ username, room, topic, side }) => {
     const [messages, setMessages] = useState<Message[]>([])
     const lastMessageRef = useRef<HTMLDivElement>(null)
 
-    const { socket } = useSocket()
+    const router = useRouter()
+
+    const { socket, leaveRoom } = useSocket({
+        leaveRoomResponse: () => {
+            router.push('/')
+        },
+    })
 
     useEffect(() => {
         if (socket) {
@@ -63,7 +69,7 @@ const Chat: React.FC<ChatProps> = ({ username, room, topic, side, handleLeave })
                         <h1 className="card-title">
                             <TopicLabel topic={topic} side={side} />
                         </h1>
-                        <button className="btn-accent btn-sm" onClick={handleLeave}>
+                        <button className="btn-accent btn-sm" onClick={() => leaveRoom(room)}>
                             Sod this...
                         </button>
                     </div>
@@ -103,7 +109,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ username, room }) => {
     const [message, setMessage] = useState<string>('')
-    const { socket } = useSocket()
+    const { sendMessage } = useSocket()
 
     const textInputElement = useRef<HTMLInputElement>(null)
 
@@ -120,16 +126,8 @@ const Footer: React.FC<FooterProps> = ({ username, room }) => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        if (socket && message.trim()) {
-            socket.emit('message', {
-                text: message,
-                name: username,
-                socketID: socket.id,
-                room: room,
-            })
-
-            setMessage('')
-        }
+        sendMessage(message, username, room)
+        setMessage('')
     }
 
     return (
