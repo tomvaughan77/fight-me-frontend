@@ -43,7 +43,7 @@ describe('useSocket', () => {
 
         renderHook(() => useSocket(handlers))
 
-        expect(socketMock.on).toHaveBeenCalledTimes(1)
+        expect(socketMock.on).toHaveBeenCalledTimes(Object.keys(handlers).length)
         expect(socketMock.on).toHaveBeenCalledWith('leaveRoomResponse', expect.any(Function))
     })
 
