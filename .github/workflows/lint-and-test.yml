@@ -45,3 +45,6 @@ jobs:
 
             - name: Format check
               run: pnpm run format:check
+
+            - name: Unit test
+              run: pnpm test

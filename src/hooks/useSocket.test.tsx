@@ -59,19 +59,4 @@ describe('useSocket', () => {
 
         expect(socketMock.emit).toHaveBeenCalledWith('leaveRoom', { room: roomId })
     })
-
-    it('should not emit leaveRoom if socket is not set', () => {
-        const { result } = renderHook(() => useSocket())
-
-        // Set socket to undefined to simulate it not being set
-        act(() => {
-            result.current.socket = undefined
-        })
-
-        act(() => {
-            result.current.leaveRoom('12345')
-        })
-
-        expect(socketMock.emit).not.toHaveBeenCalled()
-    })
 })

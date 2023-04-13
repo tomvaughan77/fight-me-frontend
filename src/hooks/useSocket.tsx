@@ -31,7 +31,7 @@ const useSocket = (handlers?: SocketHandlers) => {
         return () => {
             socket.disconnect()
         }
-    }, [])
+    }, [handlers])
 
     const leaveRoom = (roomId: string) => {
         if (socket) {
