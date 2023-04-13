@@ -1,31 +1,22 @@
 import { StoryObj } from '@storybook/react'
-import Header from './Header'
+import Home from './index'
 
-const Component = Header
+const Component = Home
 
 export default {
     component: Component,
-    title: 'Components/Header',
+    title: 'Pages',
 }
 
 const Template: StoryObj<typeof Component> = {
     render: (args) => <Component {...args} />,
 }
 
-export const HeaderLight: typeof Template = {
+export const HomePage: typeof Template = {
     ...Template,
     loaders: [
         async () => ({
             setTheme: localStorage.setItem('theme', JSON.stringify('light')),
-        }),
-    ],
-}
-
-export const HeaderDark: typeof Template = {
-    ...Template,
-    loaders: [
-        async () => ({
-            setTheme: localStorage.setItem('theme', JSON.stringify('dark')),
         }),
     ],
 }

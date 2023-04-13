@@ -3,13 +3,15 @@ import { StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 import ThemePicker from './ThemePicker'
 
+const Component = ThemePicker
+
 export default {
-    component: ThemePicker,
+    component: Component,
     title: 'Components/Header/ThemePicker',
 }
 
-const Template: StoryObj<typeof ThemePicker> = {
-    render: (args) => <ThemePicker {...args} />,
+const Template: StoryObj<typeof Component> = {
+    render: (args) => <Component {...args} />,
 }
 
 export const DayTheme: typeof Template = {

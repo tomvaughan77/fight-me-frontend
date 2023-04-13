@@ -3,13 +3,15 @@ import type { StoryObj } from '@storybook/react'
 import { within } from '@storybook/testing-library'
 import TopicLabel from './TopicLabel'
 
+const Component = TopicLabel
+
 export default {
-    component: TopicLabel,
+    component: Component,
     title: 'Components/Chat/TopicLabel',
 }
 
-const Template: StoryObj<typeof TopicLabel> = {
-    render: (args) => <TopicLabel {...args} />,
+const Template: StoryObj<typeof Component> = {
+    render: (args) => <Component {...args} />,
 }
 
 export const ForTopic: typeof Template = {
