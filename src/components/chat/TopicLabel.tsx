@@ -1,4 +1,4 @@
-interface TopicLabelProps {
+export interface TopicLabelProps {
     topic: string
     side: string
 }
