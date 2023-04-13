@@ -14,7 +14,7 @@
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
         "test-storybook": "test-storybook",
-        "test-storybook:ci": "pnpx concurrently --verbose -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"pnpx http-server storybook-static --port 6006\" \"pnpx wait-on tcp:6006 && echo \"hello!!!!!!\"\""
+        "test-storybook:ci": "pnpx concurrently --verbose -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"pnpx http-server storybook-static --port 6006\" \"pnpx wait-on --verbose tcp:6006 && echo \"hello!!!!!!\"\""
     },
     "dependencies": {
         "daisyui": "^2.51.5",
