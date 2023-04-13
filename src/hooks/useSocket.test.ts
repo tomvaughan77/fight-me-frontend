@@ -38,14 +38,12 @@ describe('useSocket', () => {
 
     it('should register event handlers if provided', () => {
         const handlers = {
-            message: jest.fn(),
             leaveRoomResponse: jest.fn(),
         }
 
         renderHook(() => useSocket(handlers))
 
-        expect(socketMock.on).toHaveBeenCalledTimes(2)
-        expect(socketMock.on).toHaveBeenCalledWith('messageResponse', handlers.message)
+        expect(socketMock.on).toHaveBeenCalledTimes(1)
         expect(socketMock.on).toHaveBeenCalledWith('leaveRoomResponse', expect.any(Function))
     })
 
