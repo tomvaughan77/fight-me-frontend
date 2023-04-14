@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Socket, io } from 'socket.io-client'
+import { useContext, useEffect } from 'react'
+import { SocketContext } from './socketContext'
 
 interface SocketHandlers {
     leaveRoomResponse?: () => void
 }
 
 const useSocket = (handlers?: SocketHandlers) => {
-    const [socket, setSocket] = useState<Socket>()
+    const socket = useContext(SocketContext)
 
     useEffect(() => {
-        const socket = io('http://localhost:5000')
-
         if (handlers) {
             if (handlers.leaveRoomResponse) {
                 socket.on('leaveRoomResponse', () => {
@@ -20,13 +18,7 @@ const useSocket = (handlers?: SocketHandlers) => {
                 })
             }
         }
-
-        setSocket(socket)
-
-        return () => {
-            socket.disconnect()
-        }
-    }, [handlers])
+    }, [socket, handlers])
 
     const leaveRoom = (roomId: string) => {
         if (socket) {

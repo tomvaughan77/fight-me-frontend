@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import Chat from '~/components/chat/Chat'
-import useSocket from '~/hooks/useSocket'
+import useSocket from '~/hooks/socket/useSocket'
 
 const ChatPage: React.FC = () => {
     const { socket } = useSocket()

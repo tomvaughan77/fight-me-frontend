@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import useSocket from '~/hooks/useSocket'
+import useSocket from '~/hooks/socket/useSocket'
 import type Message from '~/types/Message'
 import TopicLabel from './TopicLabel'
 
