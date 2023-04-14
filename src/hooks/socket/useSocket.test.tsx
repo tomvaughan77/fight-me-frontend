@@ -14,7 +14,7 @@ describe('useSocket', () => {
 
     beforeEach(() => {
         socketMock = {
-            on: jest.fn(),
+            on: jest.fn((_, callback) => callback()),
             emit: jest.fn(),
             disconnect: jest.fn(),
             id: '98765',
@@ -53,7 +53,7 @@ describe('useSocket', () => {
 
     it('should call the leaveRoomResponse callback on the leaveRoomResponse event', () => {
         const leaveRoomResponse = jest.fn()
-        const { result } = renderHook(
+        renderHook(
             () =>
                 useSocket({
                     leaveRoomResponse: leaveRoomResponse,
