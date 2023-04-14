@@ -43,3 +43,6 @@ yarn-error.log*
 
 # storybook
 storybook-static
+
+# wsl2 nonsense
+*:Zone.Identifier
