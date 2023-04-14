@@ -6,4 +6,7 @@ module.exports = {
     },
     setupFilesAfterEnv: ['./src/setupTests.ts'],
     testMatch: ['<rootDir>/src/**/*.test.(ts|tsx)'],
+    transform: {
+        '^.+\\.tsx?$': 'babel-jest',
+    },
 }

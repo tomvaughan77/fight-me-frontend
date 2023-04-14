@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { SocketContext } from './socketContext'
+import { type Socket } from 'socket.io-client'
 
 interface SocketHandlers {
     leaveRoomResponse?: () => void
@@ -9,14 +10,12 @@ const useSocket = (handlers?: SocketHandlers) => {
     const socket = useContext(SocketContext)
 
     useEffect(() => {
-        if (handlers) {
-            if (handlers.leaveRoomResponse) {
-                socket.on('leaveRoomResponse', () => {
-                    if (handlers.leaveRoomResponse) {
-                        handlers.leaveRoomResponse()
-                    }
-                })
-            }
+        if (handlers && handlers.leaveRoomResponse) {
+            socket.on('leaveRoomResponse', () => {
+                if (handlers.leaveRoomResponse) {
+                    handlers.leaveRoomResponse()
+                }
+            })
         }
     }, [socket, handlers])
 

@@ -9,8 +9,8 @@ interface SocketProviderProps {
     children: ReactNode
 }
 
-const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-    return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
-}
+const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => (
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+)
 
 export default SocketProvider
