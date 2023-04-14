@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react'
 import { SocketContext } from './socketContext'
-import { type Socket } from 'socket.io-client'
 
 interface SocketHandlers {
     leaveRoomResponse?: () => void
