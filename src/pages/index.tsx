@@ -119,7 +119,7 @@ const NumOnlineTracker = ({ numOnline, numArguing }: { numOnline: number; numArg
             <div className="card">
                 <div className="card-body">
                     <Countdown value={numArguing} />
-                    <p>people currently arguing</p>
+                    <p>people currently fighting</p>
                 </div>
             </div>
         </>
