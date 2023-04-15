@@ -42,12 +42,6 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Install Playwright
-              run: pnpx playwright install --with-deps chromium
-
-            - name: Debug
-              run: ls -alt ./public/assets
-
             - name: Build Storybook
               run: pnpm run build-storybook --quiet
 
