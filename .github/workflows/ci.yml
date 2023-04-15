@@ -1,4 +1,4 @@
-name: Lint and Format
+name: CI
 on: [push]
 jobs:
     lint-and-format:
@@ -48,3 +48,6 @@ jobs:
 
             - name: Unit test
               run: pnpm test
+
+            - name: Prod build
+              run: pnpm run build
