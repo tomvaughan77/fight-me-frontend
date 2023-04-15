@@ -43,6 +43,9 @@ jobs:
             - name: Install Playwright
               run: pnpx playwright install --with-deps
 
+            - name: Debug
+              run: ls -alt ./public/assets
+
             - name: Build Storybook
               run: pnpm run build-storybook --quiet
 
