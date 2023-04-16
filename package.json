@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "postinstall": "playwright install --with-deps chromium",
+        "install:playwright": "playwright install --with-deps chromium",
         "build": "next build",
         "dev": "next dev",
         "lint": "next lint",
