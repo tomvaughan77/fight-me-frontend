@@ -1,5 +1,5 @@
 import { StoryObj } from '@storybook/react'
-import Chat from './chat'
+import Chat from '../pages/chat'
 
 const Component = Chat
 

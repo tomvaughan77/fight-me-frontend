@@ -1,5 +1,5 @@
 import { StoryObj } from '@storybook/react'
-import Home from './index'
+import Home from '../pages/index'
 
 const Component = Home
 
