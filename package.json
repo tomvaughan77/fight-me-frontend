@@ -19,6 +19,7 @@
         "test-storybook:ci": "pnpx concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"pnpx http-server storybook-static --port 6006 --silent\" \"pnpx wait-on http://127.0.0.1:6006 && pnpm run test-storybook\""
     },
     "dependencies": {
+        "@vercel/analytics": "^0.1.11",
         "daisyui": "^2.51.5",
         "next": "^13.2.4",
         "react": "18.2.0",
