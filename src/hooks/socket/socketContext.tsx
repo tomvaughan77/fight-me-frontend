@@ -1,7 +1,9 @@
-import React, { type ReactNode, createContext } from 'react'
+import React, { createContext, type ReactNode } from 'react'
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:5000')
+const url = process.env.BACKEND_URL ?? 'http://localhost'
+const port = String(process.env.BACKED_PORT) ?? '5000'
+const socket = io(`${url}:${port}`)
 
 export const SocketContext = createContext(socket)
 
